@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>เกมรถถังยิงกัน</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: monospace; }
+    canvas { background: #1a1a1a; display: block; margin: auto; }
+    #hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: #00ff99;
+      font-size: 16px;
+      line-height: 1.5em;
+      background: rgba(0,0,0,0.6);
+      padding: 8px 12px;
+      border-radius: 5px;
+    }
+    #info {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: #cccccc;
+      font-size: 14px;
+      background: rgba(0,0,0,0.4);
+      padding: 6px 12px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+  <div id="hud">
+    คะแนน: <span id="score">0</span><br>
+    วิธีเล่น:<br>
+    ↑ ↓ เคลื่อนที่<br>
+    Space = ยิงกระสุน
+  </div>
+
+  <div id="info">
+    คณาธิป แสงหิรัญภฤศ<br>
+    เลขที่ 13
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreDisplay = document.getElementById('score');
+
+    const tank = { x: 50, y: 220, size: 30, speed: 3 };
+    const bullets = [];
+    const enemies = [];
+    let keys = {};
+    let score = 0;
+
+    // สร้างศัตรู
+    function spawnEnemies(num = 5) {
+      for (let i = 0; i < num; i++) {
+        enemies.push({
+          x: 800 + i * 120,
+          y: Math.random() * (canvas.height - 30),
+          size: 25,
+          alive: true,
+          speed: 1 + Math.random()
+        });
+      }
+    }
+
+    spawnEnemies(6);
+
+    window.addEventListener('keydown', e => keys[e.key] = true);
+    window.addEventListener('keyup', e => keys[e.key] = false);
+
+    window.addEventListener('keypress', e => {
+      if (e.key === ' ') {
+        bullets.push({ x: tank.x + tank.size, y: tank.y + tank.size/2 - 2, dx: 5 });
+      }
+    });
+
+    function drawTank() {
+      ctx.fillStyle = 'lightgreen';
+      ctx.fillRect(tank.x, tank.y, tank.size, tank.size);
+      ctx.fillStyle = '#000';
+      ctx.fillRect(tank.x + tank.size, tank.y + tank.size/3, tank.size/2, tank.size/6);
+    }
+
+    function updateTank() {
+      if (keys['ArrowUp'] && tank.y > 0) tank.y -= tank.speed;
+      if (keys['ArrowDown'] && tank.y + tank.size < canvas.height) tank.y += tank.speed;
+    }
+
+    function drawBullets() {
+      ctx.fillStyle = 'yellow';
+      bullets.forEach(b => ctx.fillRect(b.x, b.y, 8, 4));
+    }
+
+    function updateBullets() {
+      bullets.forEach((b, i) => {
+        b.x += b.dx;
+        if (b.x > canvas.width) bullets.splice(i, 1);
+      });
+    }
+
+    function drawEnemies() {
+      enemies.forEach(e => {
+        if (e.alive) {
+          ctx.fillStyle = 'crimson';
+          ctx.fillRect(e.x, e.y, e.size, e.size);
+        }
+      });
+    }
+
+    function updateEnemies() {
+      enemies.forEach(e => {
+        if (e.alive) {
+          e.x -= e.speed;
+          if (e.x + e.size < 0) {
+            e.x = canvas.width + Math.random() * 200;
+            e.y = Math.random() * (canvas.height - e.size);
+          }
+        }
+      });
+    }
+
+    function checkCollisions() {
+      bullets.forEach((b, bi) => {
+        enemies.forEach((e, ei) => {
+          if (e.alive && b.x < e.x + e.size &&
+              b.x + 8 > e.x && b.y < e.y + e.size &&
+              b.y + 4 > e.y) {
+            e.alive = false;
+            bullets.splice(bi, 1);
+            score += 10;
+            scoreDisplay.textContent = score;
+
+            // Spawn enemy again
+            setTimeout(() => {
+              enemies[ei] = {
+                x: canvas.width + Math.random() * 300,
+                y: Math.random() * (canvas.height - 30),
+                size: 25,
+                alive: true,
+                speed: 1 + Math.random()
+              };
+            }, 1000);
+          }
+        });
+      });
+    }
+
+    function gameLoop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      updateTank(); drawTank();
+      updateBullets(); drawBullets();
+      updateEnemies(); drawEnemies();
+      checkCollisions();
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+  </script>
+</body>
+</html>
