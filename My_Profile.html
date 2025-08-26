@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title>โปรไฟล์ส่วนตัว</title>
+
+  <style>
+
+    body {
+      margin: 0;
+      font-family: monospace;
+      background: url("background.jpg") no-repeat center center fixed;
+      background-size: cover;
+      backdrop-filter: brightness(0.5);
+      color: #cccccc; /* เทาอ่อน */
+    }
+
+    header {
+      background-color: #003366;
+      padding: 15px;
+      text-align: center;
+      border-bottom: 2px solid #005599;
+    }
+
+    nav {
+      background-color: #002244;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: #00ff99;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    nav button:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    section {
+      display: none;
+      padding: 20px;
+      animation: fadeIn 0.4s ease-in;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .terminal-box {
+        background-color: #000c1a;
+        padding: 20px;
+        border: 1px solid #005599;
+        border-radius: 5px;
+        max-width: 500px;
+        margin-left: 40px;      /* ให้ชิดขวา */
+        margin-right: auto;     /* ระยะห่างจากขอบจอ */
+        }
+
+    h2 {
+      color: #00ff99;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>> แนะนำตัว :: My Profile</h1>
+  </header>
+
+  <nav>
+    <button onclick="showPage('home')">หน้าหลัก</button>
+    <button onclick="showPage('interest')">ความสนใจ</button>
+    <button onclick="showPage('hobby')">งานอดิเรก</button>
+    <button onclick="showPage('gallery')">แกลเลอรี</button>
+    <button onclick="showPage('contact')">ติดต่อ</button>
+  </nav>
+
+  <main>
+    <section id="home" class="active">
+      <div class="terminal-box">
+        <h2>> หน้าหลัก</h2>
+        <p>สวัสดีครับ คณาธิป แสงหิรัญภฤศ ศึกษาอยู่โรงเรียนสุรธรรมพิทักษ์ ม6/3 เลขที่ 13</p>
+        <p>ยินดีที่ได้รู้จัก! ลองคลิกเมนูด้านบนเพื่อรู้จักกันมากขึ้นนะครับ</p>
+      </div>
+    </section>
+
+    <section id="interest">
+      <div class="terminal-box">
+        <h2>> ความสนใจ</h2>
+        <ul>
+          <li>🔧 อิเล็กทรอนิกส์</li>
+          <li>🛠️ เครื่องมือช่าง</li>
+          <li>🖥️ ซ่อมแซมอุปกรณ์ไฟฟ้า</li>
+          <li>🎮 เกมและเทคโนโลยี</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="hobby">
+      <div class="terminal-box">
+        <h2>> งานอดิเรก</h2>
+        <p>งานอดิเรกของผมคือ...</p>
+        <ul>
+          <li>🛠️ ซ่อมอุปกรณ์ต่างๆ</li>
+          <li>🎮 เล่นเกมแนวแอ็กชัน & วางแผน</li>
+          <li>💤 นอนหลับเพื่อชาร์จพลัง</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="terminal-box">
+        <h2>> แกลเลอรี</h2>
+        <p>(สามารถใส่รูปภาพผลงาน หรือภาพกิจกรรมต่างๆ ได้ที่นี่)</p>
+        <p>📷 ยังไม่มีภาพในขณะนี้</p>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="terminal-box">
+        <h2>> ติดต่อ</h2>
+        <p>คุณสามารถติดต่อผมผ่านช่องทางต่อไปนี้:</p>
+        <ul>
+          <li>📧 Email: yourmail@example.com</li>
+          <li>📞 โทร: 012-345-6789</li>
+          <li>💬 Line: yourlineid</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function showPage(pageId) {
+      const sections = document.querySelectorAll("section");
+      sections.forEach(sec => {
+        sec.classList.remove("active");
+      });
+      document.getElementById(pageId).classList.add("active");
+    }
+  </script>
+
+</body>
+</html>
